@@ -5,6 +5,7 @@ import br.com.jpit.entidades.Endereco;
 import br.com.jpit.repositories.EnderecoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 
@@ -44,10 +45,10 @@ public class EnderecoService {
         // Se não encontrado, buscar no ViaCEP
         try {
             LOG.infof("Buscando no ViaCEP para o CEP: %s", cep);
-            endereco = viaCepService.buscarCep(cep);
-            if (endereco != null) {
+            Response response = viaCepService.buscarCep(cep);
+            if (response.getStatus() == Response.Status.OK.getStatusCode() && response.hasEntity()) {
+                endereco = response.readEntity(Endereco.class);
                 redisService.salvarCep(endereco);
-
                 salvarEnderecoNoRepositorio(endereco);
             }
         } catch (Exception e) {

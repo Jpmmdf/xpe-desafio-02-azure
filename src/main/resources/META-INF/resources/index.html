@@ -69,7 +69,7 @@
 </div>
 
 <script>
-    var apiHost = 'http://localhost:8080';
+    var apiHost = window.location.origin; // Usa a origem do navegador
 
     document.getElementById('cepForm').addEventListener('submit', function(e) {
         e.preventDefault();

@@ -5,6 +5,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 @Path("/ws")
@@ -14,5 +15,5 @@ public interface ViaCepService {
     @GET
     @Path("/{cep}/json/")
     @Produces(MediaType.APPLICATION_JSON)
-    Endereco buscarCep(@PathParam("cep") String cep);
+    Response buscarCep(@PathParam("cep") String cep);
 }
