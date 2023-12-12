@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  myservice:
+    image: joaomilhome/poc-xpe-desafio-02-jvm
+    ports:
+      - "8080:8080"
+    environment:
+      REDIS_HOSTS: "rediss://default@.redis.cache.windows.net:6380"
+      REDIS_PASSWORD: "="
+      MONGODB_CONNECTION_STRING: "mongodb://"
