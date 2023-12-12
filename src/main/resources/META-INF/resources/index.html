@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Busca de Endereço por CEP</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            width: 400px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #0d6efd;
+        }
+
+        input, button {
+            width: 90%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0b5ed7;
+        }
+
+        #resultado {
+            text-align: left;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Busca de Endereço</h1>
+    <p>Insira o CEP para encontrar o endereço correspondente.</p>
+    <form id="cepForm">
+        <input type="text" id="cep" name="cep" placeholder="Digite o CEP (ex: 71906-750)" required>
+        <button type="submit">Buscar Endereço</button>
+    </form>
+    <div id="resultado"></div>
+</div>
+
+<script>
+    var apiHost = 'http://localhost:8080';
+
+    document.getElementById('cepForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var cep = document.getElementById('cep').value;
+        buscarEndereco(cep);
+    });
+
+    function buscarEndereco(cep) {
+        fetch(apiHost + '/endereco/' + cep)
+            .then(response => response.json())
+            .then(data => {
+                formatarEExibirEndereco(data);
+            })
+            .catch(error => {
+                console.error('Erro ao buscar endereço:', error);
+                document.getElementById('resultado').innerText = 'Erro ao buscar endereço.';
+            });
+    }
+
+    function formatarEExibirEndereco(dados) {
+        var resultado = document.getElementById('resultado');
+        if(dados && dados.logradouro) {
+            resultado.innerHTML = '<strong>Logradouro:</strong> ' + dados.logradouro +
+                '<br><strong>Bairro:</strong> ' + dados.bairro +
+                '<br><strong>Cidade:</strong> ' + dados.localidade +
+                '<br><strong>Estado:</strong> ' + dados.uf;
+        } else {
+            resultado.innerHTML = 'Endereço não encontrado para o CEP fornecido.';
+        }
+    }
+</script>
+</body>
+</html>
